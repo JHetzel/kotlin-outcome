@@ -58,7 +58,7 @@ publishing {
         maven {
             setUrl("https://maven.pkg.github.com/juliushetzel/kotlin-outcome")
             credentials {
-                username = System.getenv("GITHUB_USER")
+                username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
