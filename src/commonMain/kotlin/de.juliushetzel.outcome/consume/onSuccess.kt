@@ -15,21 +15,21 @@ fun <A> Outcome<A>.onSuccess(consume: (A) -> Unit): FailureConsumable =
         }
     }
 
-sealed interface FailureConsumable {
+sealed class FailureConsumable {
 
     /**
      * Calls [consume] if this is [Outcome.Failure]
      */
-    fun onFailure(consume: (FailureReason) -> Unit)
+    abstract fun onFailure(consume: (FailureReason) -> Unit)
 }
 
-private class ConsumeFailure(private val reason: FailureReason) : FailureConsumable {
+private class ConsumeFailure(private val reason: FailureReason) : FailureConsumable() {
     override fun onFailure(consume: (FailureReason) -> Unit) {
         consume(reason)
     }
 }
 
-private object EmptyFailureConsumable : FailureConsumable {
+private object EmptyFailureConsumable : FailureConsumable() {
     override fun onFailure(consume: (FailureReason) -> Unit) {
         // do nothing
     }
