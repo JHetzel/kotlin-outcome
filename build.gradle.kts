@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform") version "1.7.21"
+    id("maven-publish")
 }
 
 group = "de.juliushetzel"
@@ -8,6 +9,9 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
 }
+
+val GITHUB_USER: String by project
+val GITHUB_TOKEN: String by project
 
 kotlin {
     jvm {
@@ -49,5 +53,17 @@ kotlin {
         val jsTest by getting
         val nativeMain by getting
         val nativeTest by getting
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            setUrl("https://maven.pkg.github.com/juliushetzel/kotlin-outcome")
+            credentials {
+                username = GITHUB_USER
+                password = GITHUB_TOKEN
+            }
+        }
     }
 }
