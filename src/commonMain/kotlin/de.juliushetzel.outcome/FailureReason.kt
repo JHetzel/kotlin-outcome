@@ -7,14 +7,16 @@ interface FailureReason
 @JvmInline
 value class UnknownFailureReason internal constructor(val cause: Throwable) : FailureReason
 
-class ComposedFailureReason internal constructor(reasons: Set<FailureReason>) : FailureReason {
-    val reasons: Set<FailureReason> = reasons.flatMap { reason ->
-        if(reason is ComposedFailureReason) reason.reasons
-        else setOf(reason)
-    }.toSet()
-
-    fun contains(reason: FailureReason) = reasons.contains(reason)
-
+class ComposedFailureReason private constructor(reasons: Set<FailureReason>) : FailureReason,
+    Set<FailureReason> by reasons {
     override fun toString(): String =
-        "ComposedFailureReason([${reasons.joinToString(", ")}])"
+        "ComposedFailureReason([${joinToString(", ")}])"
+
+    companion object {
+        internal operator fun invoke(reasons: Set<FailureReason>) =
+            ComposedFailureReason(reasons.flatMap { reason ->
+                if (reason is ComposedFailureReason) reason
+                else setOf(reason)
+            }.toSet())
+    }
 }
