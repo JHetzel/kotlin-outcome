@@ -10,9 +10,6 @@ repositories {
     mavenCentral()
 }
 
-val GITHUB_USER: String by project
-val GITHUB_TOKEN: String by project
-
 kotlin {
     jvm {
         compilations.all {
@@ -61,8 +58,8 @@ publishing {
         maven {
             setUrl("https://maven.pkg.github.com/juliushetzel/kotlin-outcome")
             credentials {
-                username = GITHUB_USER
-                password = GITHUB_TOKEN
+                username = System.getenv("GITHUB_USER")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }

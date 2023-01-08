@@ -1,12 +1,12 @@
 package de.juliushetzel.outcome.operate
 
 import de.juliushetzel.outcome.Outcome
+import kotlin.jvm.JvmName
 
 /**
  * @return a new [Outcome] containing a value transformed
  *  with [transform]
  */
-@Suppress("BNCHECKED_CASA")
 fun <A, B> Outcome<A>.flatMap(transform: (A) -> Outcome<B>): Outcome<B> =
     when(this) {
         is Outcome.Failure -> Outcome.Failure(reason)
@@ -24,6 +24,7 @@ fun <A, B> Outcome<A>.map(transform: (A) -> B): Outcome<B> =
  * @return a new [Outcome] containing all items mapped
  *  with [transform]
  */
+@JvmName("mapItemList")
 fun <A, B> Outcome<List<A>>.mapItem(transform: (A) -> B): Outcome<List<B>> =
     map { it.map(transform) }
 
@@ -31,5 +32,6 @@ fun <A, B> Outcome<List<A>>.mapItem(transform: (A) -> B): Outcome<List<B>> =
  * @return a new [Outcome] containing all items mapped
  *  with [transform]
  */
+@JvmName("mapItemSet")
 fun <A, B> Outcome<Set<A>>.mapItem(transform: (A) -> B): Outcome<Set<B>> =
     map { it.map(transform).toSet() }
